@@ -1,3 +1,6 @@
 [submodule "src/thrustered_vehicle_motion_controller"]
 	path = src/thrustered_vehicle_motion_controller
 	url = https://github.com/rahulknns/thrustered_vehicle_motion_controller.git
+[submodule "src/pid_controller"]
+	path = src/pid_controller
+	url = https://github.com/rahulknns/pid_controller.git
