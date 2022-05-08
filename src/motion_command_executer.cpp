@@ -2,16 +2,16 @@
 #include "thrustered_vehicle_motion_controller/thrustered_vehicle_motion_controller.h"
 #include  "pid_controller/pid_controller.h"
 #include  "motion_commands.h"
-#include  "ros_functs/ros_functs.h"
+#include  "ros_functs.h"
 
 #include <thread>
 #include <chrono>
 
-int command,surge_magnitude,sway_magnitude;
+int motion_command,surge_magnitude,sway_magnitude;
 bool stopped = false;
 ThrusteredVehicleMotionController cholan_motion_controller;
 PIDController pid_yaw,pid_heave;
-float set_yaw, current_yaw,current_pitch, current_roll, set_depth, current_depth;
+float target_yaw, current_yaw,current_pitch, current_roll, target_depth, current_depth;
 
 int main(int argc, char** argv){
 
@@ -24,7 +24,7 @@ int main(int argc, char** argv){
 
     while (true)
     {
-        switch (command)
+        switch (motion_command)
         {
         case FORWARD:
             if (!stopped)
@@ -64,19 +64,19 @@ int main(int argc, char** argv){
 
 
         case UP:
-            set_depth += 0.1;
+            target_depth += 0.1;
             break;
 
         case DOWN:
-            set_depth -= 0.1;
+            target_depth -= 0.1;
             break;
 
         case YAW_LEFT:
-            set_yaw += 10;
+            target_yaw += 10;
             break;
 
         case YAW_RIGHT:
-            set_yaw -= 10;
+            target_yaw -= 10;
             break;
         
         case STOP:
@@ -121,7 +121,7 @@ void yaw_thread_funct(){
      while (!stopped)
      {   current_time = std::chrono::high_resolution_clock::now();
          dt        = std::chrono::duration_cast<std::chrono::milliseconds> (current_time - prev_time);
-         cholan_motion_controller.doYaw(pid_yaw.update(set_yaw,current_yaw,dt.count()*1000));
+         cholan_motion_controller.doYaw(pid_yaw.update(target_yaw,current_yaw,dt.count()*1000));
 
          prev_time   =  std::chrono::high_resolution_clock::now();
          std::this_thread::sleep_for(std::chrono::seconds(1/REFRESH_RATE));
@@ -143,7 +143,7 @@ void heave_thread_funct(){
          current_time = std::chrono::high_resolution_clock::now();
          dt        = std::chrono::duration_cast<std::chrono::milliseconds> (current_time - prev_time);
 
-         cholan_motion_controller.doHeave(pid_heave.update(set_depth,current_depth,dt.count()*1000));
+         cholan_motion_controller.doHeave(pid_heave.update(target_depth,current_depth,dt.count()*1000));
          prev_time   =  std::chrono::high_resolution_clock::now();
          std::this_thread::sleep_for(std::chrono::seconds(1/REFRESH_RATE));
 
