@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(cholan_3_0)
+project(materov22_pioneer)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
