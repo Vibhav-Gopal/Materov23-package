@@ -8,6 +8,9 @@
 #define DOWN              5
 #define YAW_LEFT          6
 #define YAW_RIGHT         7
-#define STOP              8
-#define RESUME            9
+#define  SPEED_INCREASE   8
+#define  SPEED_DECREASE   9
+#define STOP              10
+#define RESUME            11
+
 #endif
