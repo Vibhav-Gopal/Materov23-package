@@ -17,6 +17,7 @@ int main(int argc, char** argv){
 
     
     ros_init(argc,argv);
+    cholan_motion_controller.initializeThrusters();
     std::thread yaw_thread(yaw_thread_funct);
     std::thread heave_thread(heave_thread_funct);
 

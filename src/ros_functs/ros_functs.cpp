@@ -15,6 +15,9 @@ extern int motion_command;
 ros::Subscriber current_orientation_sub, motion_command_sub,target_yaw_sub;
 ros::Publisher pwm_values_pub;
 
+ros:: NodeHandle* nh;
+
+
 std_msgs::Int16MultiArray pwm_values_msg;
 
 void currentOrientationCallBack(const std_msgs::Float32MultiArrayConstPtr&  current_orientation_msg ){
@@ -39,13 +42,12 @@ void motionCommandCallBack(const std_msgs::Int32ConstPtr&  motion_command_msg ){
 
 void ros_init(int argc, char** argv){
     ros::init(argc,argv,"motion_command_executer");
-    ros:: NodeHandle nh;
 
-    current_orientation_sub    = nh.subscribe("current_orientation",1,currentOrientationCallBack);
-    target_yaw_sub    = nh.subscribe("target_yaw",1,currentOrientationCallBack);
-    motion_command_sub    = nh.subscribe("motion_command",1,motionCommandCallBack);
+    current_orientation_sub    = (*nh).subscribe("current_orientation",1,currentOrientationCallBack);
+    target_yaw_sub    = (*nh).subscribe("target_yaw",1,currentOrientationCallBack);
+    motion_command_sub    = (*nh).subscribe("motion_command",1,motionCommandCallBack);
     
-    pwm_values_pub = nh.advertise<std_msgs::Int16MultiArray>("pwm_values",5);
+    pwm_values_pub = (*nh).advertise<std_msgs::Int16MultiArray>("pwm_values",5);
     pwm_values_msg.data.resize(6);
 
    
