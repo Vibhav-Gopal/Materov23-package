@@ -43,6 +43,8 @@ void motionCommandCallBack(const std_msgs::Int32ConstPtr&  motion_command_msg ){
 void ros_init(int argc, char** argv){
     ros::init(argc,argv,"motion_command_executer");
 
+    nh = new ros::NodeHandle;
+
     current_orientation_sub    = (*nh).subscribe("current_orientation",1,currentOrientationCallBack);
     target_yaw_sub    = (*nh).subscribe("target_yaw",1,currentOrientationCallBack);
     motion_command_sub    = (*nh).subscribe("motion_command",1,motionCommandCallBack);
