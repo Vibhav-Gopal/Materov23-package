@@ -4,13 +4,6 @@ add_executable(motion_command_executer  motion_command_executer.cpp      pid_con
 
 target_link_libraries( motion_command_executer  pthread ${catkin_LIBRARIES})
 
+add_executable(input joystick/input.cpp joystick/joystick.cpp)
 
-add_executable(joystick joystick/joystick.cpp)
-    target_link_libraries(joystick
-    ${catkin_LIBRARIES}
-)
-
-add_executable(input joystick/joystick_input.cpp)
-    target_link_libraries(input
-    ${catkin_LIBRARIES}
-)
+target_link_libraries(input pthread ${catkin_LIBRARIES})
