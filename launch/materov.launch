@@ -1,0 +1,9 @@
+<launch>
+
+    <node name = "input" pkg = "materov22_pioneer" type = "input"/>
+
+    <node name = "web_video_server" pkg = "web_video_server" type = "web_video_server"/>
+
+    <node name = "rosbride_websocket" pkg = "rosbridge_server" type = "rosbridge_websocket"/>
+
+</launch>

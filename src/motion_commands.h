@@ -12,5 +12,6 @@
 #define  SPEED_DECREASE   9
 #define STOP              10
 #define RESUME            11
+#define LIGHTS_ON         12
 
 #endif
