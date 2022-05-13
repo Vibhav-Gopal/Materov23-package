@@ -8,10 +8,12 @@
 #define DOWN              5
 #define YAW_LEFT          6
 #define YAW_RIGHT         7
-#define  SPEED_INCREASE   8
-#define  SPEED_DECREASE   9
-#define STOP              10
-#define RESUME            11
-#define LIGHTS_ON         12
+#define  SPRINT           8
+#define STOP              9
+#define RESUME            10
+#define TURN_TO_GIVEN_DIRECTION 11
+#define LIGHTS_ON                12
+#define LIGHTS_OFF               13
+
 
 #endif
