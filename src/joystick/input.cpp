@@ -15,7 +15,13 @@
 #include "joystick.h"
 #include <unistd.h>
 #include"ros/ros.h"
-#include"std_msgs/Int32.h"
+#include"std_msgs/String.h"
+#include<iostream>
+#include<cmath>
+#include<vector>
+#include<sstream>
+#define RAD2DEG 57.2975
+
 
 int main(int argc, char** argv)
 {
@@ -23,10 +29,18 @@ int main(int argc, char** argv)
 
   ros::NodeHandle nh;
 
-  ros::Publisher pub = nh.advertise<std_msgs::Int32>("/motion_command",1000);
+  ros::Publisher pub = nh.advertise<std_msgs::String>("/commands",1);
 
-  std_msgs::Int32 i;
+  std_msgs::String i;
+
+//  std::vector<int>arr_2;
+
+  std::vector<int>arr_3;
+
+  std::vector<int>arr_4;
   
+  float x,y;
+
   // Create an instance of Joystick
   Joystick joystick("/dev/input/js0");
 
@@ -51,7 +65,7 @@ int main(int argc, char** argv)
         //L1 - Up
         if(event.number == 4)
         {
-          i.data = 4;
+          i.data = "Up";
 
           pub.publish(i);
         }
@@ -59,7 +73,7 @@ int main(int argc, char** argv)
         //R1 - Down
         else if(event.number == 5)
         {
-          i.data = 5;
+          i.data = "Down";
 
           pub.publish(i);
         }
@@ -67,7 +81,7 @@ int main(int argc, char** argv)
         //L2 - Yaw left
         else if(event.number == 6)
         {
-          i.data = 6;
+          i.data = "Yaw Left";
 
           pub.publish(i);
         }
@@ -75,7 +89,7 @@ int main(int argc, char** argv)
         //R2 - Yaw right
         else if(event.number == 7)
         {
-          i.data = 7;
+          i.data = "Yaw Right";
 
           pub.publish(i);
         }
@@ -83,7 +97,7 @@ int main(int argc, char** argv)
         //Button 1 - Speed_increase
         else if(event.number == 0)
         {
-          i.data = 8;
+          i.data = "Speed Increase";
 
           pub.publish(i);
         }
@@ -91,23 +105,31 @@ int main(int argc, char** argv)
         //Button 3 - Speed increase
         else if(event.number == 2)
         {
-          i.data = 9;
+          i.data = "Speed Decrease";
 
           pub.publish(i);
         }
 
-        //Button 2 - Resume
+        //Button 2 - Start
         else if(event.number == 1)
         {
-          i.data = 11;
+          i.data = "Start";
 
           pub.publish(i);
         }
 
-        //Button 4 - Kill Switch
+        //Button 4 - Stop
         else if(event.number == 3)
         {
-          i.data = 10;
+          i.data = "Stop";
+
+          pub.publish(i);
+        }
+
+        //Button select - Lights on 
+        else if(event.number == 8)
+        {
+          i.data = "Lights On";
 
           pub.publish(i);
         }
@@ -121,7 +143,7 @@ int main(int argc, char** argv)
             //Backward is pressed
             if(event.value > 0)
             {
-              i.data = 1;
+              i.data = "Backward";
               
               pub.publish(i);
             }
@@ -129,7 +151,7 @@ int main(int argc, char** argv)
             //Forward is pressed
             if(event.value < 0)
             {
-              i.data = 0;
+              i.data = "Forward";
               
               pub.publish(i);
             }
@@ -140,20 +162,72 @@ int main(int argc, char** argv)
             //Right is pressed
             if(event.value > 0)
             {
-              i.data = 3;
+              i.data = "Right";
 
               pub.publish(i);
             }
             //Left is pressed
             if(event.value < 0)
             {
-              i.data = 2;
+              i.data = "Left";
 
               pub.publish(i);
             }
           }
 
+          else if(event.number == 3)
+          {
+              arr_3.push_back(event.value);
+
+              x = *max_element(arr_3.begin(), arr_3.end());
+          }
+
+          else if(event.number == 4)
+          {
+              arr_4.push_back(event.value);
+
+              y = *min_element(arr_4.begin(), arr_4.end());
+          }
+
+          float angle;
+
+          if(y!=0)
+          {
+            float an = -x/y;
+
+            angle = atan(an) * RAD2DEG;
+            
+            std::ostringstream ss;
+
+            ss << angle;
+
+            std::string ang(ss.str()); 
+
+            i.data = ang;
+              
+            pub.publish(i);
+
+            arr_3.clear();
+
+            arr_4.clear();
+            
+          }
+
+          else if(x != 0 && y == 0)
+          {
+            i.data = "90.0";
+
+            pub.publish(i);
+
+            arr_3.clear();
+
+            arr_4.clear();
+          }
+
+            
+          }
+          
       }
     }
   }
-}
+
