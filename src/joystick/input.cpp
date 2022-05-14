@@ -16,7 +16,7 @@
 #include <unistd.h>
 #include"ros/ros.h"
 #include"std_msgs/String.h"
-#include "materov22_pioneer/motion_control_msg.h"
+#include "materov22_pioneer/motion_command_msg.h"
 #include<iostream>
 #include<cmath>
 #include<vector>
@@ -33,11 +33,11 @@ int main(int argc, char** argv)
 
   ros::NodeHandle nh;
 
-  ros::Publisher pub = nh.advertise<materov22_pioneer::motion_control_msg>("/motion_command",1);
+  ros::Publisher pub = nh.advertise<materov22_pioneer::motion_command_msg>("/motion_command",1);
 
   std_msgs::String j;
 
-  materov22_pioneer::motion_control_msg i;
+  materov22_pioneer::motion_command_msg i;
 
   std::vector<int>arr_2;
 
@@ -231,7 +231,7 @@ int main(int argc, char** argv)
 
             i.command = TURN_TO_GIVEN_DIRECTION;
             
-            i.yaw_angle = angle;
+            i.angle = angle;
             
             pub.publish(i); 
 
@@ -254,7 +254,7 @@ int main(int argc, char** argv)
 
             i.command = TURN_TO_GIVEN_DIRECTION;  
             
-            i.yaw_angle = angle;
+            i.angle = angle;
 
             pub.publish(i);
 
