@@ -1,3 +1,2 @@
 int8 command
 int16 angle
-float32 a

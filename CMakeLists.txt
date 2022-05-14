@@ -11,9 +11,9 @@ find_package(catkin REQUIRED COMPONENTS
 
 add_message_files(
    FILES
-   MotionCommand.msg
-   PWMValues.msg
-   SensorData.msg
+   motion_command_msg.msg
+   pwm_values_msg.msg
+   sensor_data_msg.msg
  )
 
  generate_messages(

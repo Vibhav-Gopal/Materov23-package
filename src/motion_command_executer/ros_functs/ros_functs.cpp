@@ -2,7 +2,7 @@
 #include "ros/ros.h"
 #include "motion_commands.h"
 #include "materov22_pioneer/pwm_values_msg.h"
-#include "materov22_pioneer/motion_commad_msg.h"
+#include "materov22_pioneer/motion_command_msg.h"
 #include "materov22_pioneer/sensor_data_msg.h"
 
 
@@ -26,7 +26,7 @@ void motionCommandCallBack(const  materov22_pioneer::motion_command_msgConstPtr&
     motion_command   = motion_command_msg->command;
     if (motion_command == TURN_TO_GIVEN_DIRECTION )
     {
-       target_yaw = motion_command_msg->yaw_angle;
+       target_yaw = motion_command_msg->angle;
     }
     
 
@@ -64,7 +64,7 @@ void publishPWMValues(int* pwm_values){
 
     for (int i = 0; i < 4; i++)
     {
-        pwm_values_msg.data[i] = pwm_values[i];
+        pwm_values_msg.values[i] = pwm_values[i];
     }
     
     pwm_values_pub.publish(pwm_values_msg);
