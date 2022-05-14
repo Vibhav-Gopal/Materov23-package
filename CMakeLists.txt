@@ -58,11 +58,11 @@ add_message_files(
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+add_message_files(
+   FILES
+   motion_control_msg.msg
+   sensor_data_msg.msg
+ )
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -79,7 +79,10 @@ add_message_files(
 # )
 
 ## Generate added messages and services with any dependencies listed here
-
+ generate_messages(
+  DEPENDENCIES
+  std_msgs
+ )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
