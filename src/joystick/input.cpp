@@ -16,12 +16,16 @@
 #include <unistd.h>
 #include"ros/ros.h"
 #include"std_msgs/String.h"
+#include "materov22_pioneer/motion_control_msg.h"
 #include<iostream>
 #include<cmath>
 #include<vector>
 #include<sstream>
+#include"../motion_commands.h"
 #define RAD2DEG 57.2975
 
+using namespace std;
+int quad;
 
 int main(int argc, char** argv)
 {
@@ -29,17 +33,19 @@ int main(int argc, char** argv)
 
   ros::NodeHandle nh;
 
-  ros::Publisher pub = nh.advertise<std_msgs::String>("/commands",1);
+  ros::Publisher pub = nh.advertise<materov22_pioneer::motion_control_msg>("/motion_command",1);
 
-  std_msgs::String i;
+  std_msgs::String j;
 
-//  std::vector<int>arr_2;
+  materov22_pioneer::motion_control_msg i;
+
+  std::vector<int>arr_2;
 
   std::vector<int>arr_3;
 
   std::vector<int>arr_4;
   
-  float x,y;
+  float x,y,z;
 
   // Create an instance of Joystick
   Joystick joystick("/dev/input/js0");
@@ -65,7 +71,7 @@ int main(int argc, char** argv)
         //L1 - Up
         if(event.number == 4)
         {
-          i.data = "Up";
+          i.command = UP;
 
           pub.publish(i);
         }
@@ -73,7 +79,7 @@ int main(int argc, char** argv)
         //R1 - Down
         else if(event.number == 5)
         {
-          i.data = "Down";
+          i.command = DOWN;
 
           pub.publish(i);
         }
@@ -81,7 +87,7 @@ int main(int argc, char** argv)
         //L2 - Yaw left
         else if(event.number == 6)
         {
-          i.data = "Yaw Left";
+          i.command = YAW_LEFT;
 
           pub.publish(i);
         }
@@ -89,31 +95,23 @@ int main(int argc, char** argv)
         //R2 - Yaw right
         else if(event.number == 7)
         {
-          i.data = "Yaw Right";
+          i.command = YAW_RIGHT;
 
           pub.publish(i);
         }
 
-        //Button 1 - Speed_increase
+        //Button 1 - Sprint
         else if(event.number == 0)
         {
-          i.data = "Speed Increase";
+          i.command = SPRINT;
 
           pub.publish(i);
         }
 
-        //Button 3 - Speed increase
-        else if(event.number == 2)
-        {
-          i.data = "Speed Decrease";
-
-          pub.publish(i);
-        }
-
-        //Button 2 - Start
+        //Button 2 - Resume
         else if(event.number == 1)
         {
-          i.data = "Start";
+          i.command = 10;
 
           pub.publish(i);
         }
@@ -121,15 +119,23 @@ int main(int argc, char** argv)
         //Button 4 - Stop
         else if(event.number == 3)
         {
-          i.data = "Stop";
+          i.command = STOP;
 
           pub.publish(i);
         }
 
-        //Button select - Lights on 
-        else if(event.number == 8)
+        //Button L3 - Lights on 
+        else if(event.number == 10)
         {
-          i.data = "Lights On";
+          i.command = LIGHTS_ON;
+
+          pub.publish(i);
+        }
+
+        //Button R3 - Lights off 
+        else if(event.number == 11)
+        {
+          i.command = LIGHTS_OFF;
 
           pub.publish(i);
         }
@@ -143,7 +149,7 @@ int main(int argc, char** argv)
             //Backward is pressed
             if(event.value > 0)
             {
-              i.data = "Backward";
+              i.command = BACKWARD;
               
               pub.publish(i);
             }
@@ -151,7 +157,7 @@ int main(int argc, char** argv)
             //Forward is pressed
             if(event.value < 0)
             {
-              i.data = "Forward";
+              i.command = FORWARD;
               
               pub.publish(i);
             }
@@ -162,66 +168,99 @@ int main(int argc, char** argv)
             //Right is pressed
             if(event.value > 0)
             {
-              i.data = "Right";
+              i.command = RIGHT;
 
               pub.publish(i);
             }
             //Left is pressed
             if(event.value < 0)
             {
-              i.data = "Left";
+              i.command = LEFT;
 
               pub.publish(i);
             }
           }
 
+          else if(event.number == 2)
+          {
+              // arr_2.push_back(event.value);
+
+              y = event.value;
+          }
+          
           else if(event.number == 3)
           {
-              arr_3.push_back(event.value);
+              // arr_3.push_back(event.value);
 
-              x = *max_element(arr_3.begin(), arr_3.end());
+              x = event.value;
           }
 
           else if(event.number == 4)
           {
-              arr_4.push_back(event.value);
+              // arr_4.push_back(event.value);
 
-              y = *min_element(arr_4.begin(), arr_4.end());
+              z = event.value;
           }
 
-          float angle;
-
           if(y!=0)
-          {
+          {            
             float an = -x/y;
 
-            angle = atan(an) * RAD2DEG;
+            int angle = int(atan(an) * RAD2DEG);
+
+            if(z<0)
+            {
+              quad = 1;
+            }
+            else if(z>0)
+            {
+              quad = 0;
+            }
+
+            if(quad == 0)
+            {
+              angle = int(angle + 180);
+            }
+
+            if(quad ==1 && angle < 0)
+            {
+              angle = int(angle + 360);
+            }
+
+            cout << "\nAngle : " << angle << endl;
+
+            i.command = TURN_TO_GIVEN_DIRECTION;
             
-            std::ostringstream ss;
-
-            ss << angle;
-
-            std::string ang(ss.str()); 
-
-            i.data = ang;
-              
-            pub.publish(i);
+            i.yaw_angle = angle;
+            
+            pub.publish(i); 
 
             arr_3.clear();
 
-            arr_4.clear();
+            arr_2.clear(); 
             
           }
 
           else if(x != 0 && y == 0)
           {
-            i.data = "90.0";
+            int angle = 270;
+
+            if(quad == 1)
+            {
+              angle = 90;
+            }
+
+            cout << "\nAngle : "<< angle << endl;
+
+            i.command = TURN_TO_GIVEN_DIRECTION;  
+            
+            i.yaw_angle = angle;
 
             pub.publish(i);
 
             arr_3.clear();
 
-            arr_4.clear();
+            arr_2.clear();
           }
 
             

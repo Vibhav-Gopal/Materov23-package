@@ -1,2 +1,2 @@
 int8 command
-int8 yaw_angle
+int32 yaw_angle
