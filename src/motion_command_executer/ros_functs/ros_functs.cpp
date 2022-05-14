@@ -1,4 +1,4 @@
-#include "ros_functs.h"
+/*#include "ros_functs.h"
 #include "ros/ros.h"
 #include "motion_commands.h"
 #include "std_msgs/Float32MultiArray.h"
@@ -76,4 +76,4 @@ void publishPWMValues(int* pwm_values){
     }
     
     pwm_values_pub.publish(pwm_values_msg);
-}
+} */
