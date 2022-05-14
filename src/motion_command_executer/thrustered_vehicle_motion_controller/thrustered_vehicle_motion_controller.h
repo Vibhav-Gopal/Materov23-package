@@ -16,32 +16,38 @@ public:
     void initializeThrusters();
     
     void setYaw(int magnitude_in_percent);
+    void resetYaw();
     void doYaw(int magnitude_in_percent);
     void stopYaw();
 
     void setPitch(int magnitude_in_percent);
+    void resetPitch();
     void doPitch(int magnitude_in_percent);
     void stopPitch();
     
     void setRoll(int magnitude_in_percent);
+    void resetRoll();
     void doRoll(int magnitude_in_percent);
     void stopRoll();
 
     void setSurge(int magnitude_in_percent);
+    void resetSurge();
     void doSurge(int magnitude_in_percent);
     void stopSurge();
     
     void setSway(int magnitude_in_percent);
+    void resetSway();
     void doSway(int magnitude_in_percent);
     void stopSway();
     
     void setHeave(int magnitude_in_percent);
+    void resetHeave();
     void doHeave(int magnitude_in_percent);
     void stopHeave();
-
+    
+    void resetAllThrusters();
     void stopAllThrusters();
 
-private:
     void updateThrusterValues();
      
     

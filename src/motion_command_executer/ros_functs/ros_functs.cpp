@@ -1,6 +1,6 @@
 #include "ros_functs.h"
 #include "ros/ros.h"
-#include "../motion_commands.h"
+#include "motion_commands.h"
 #include "std_msgs/Float32MultiArray.h"
 #include "std_msgs/Int8MultiArray.h"
 #include "std_msgs/Float32.h"

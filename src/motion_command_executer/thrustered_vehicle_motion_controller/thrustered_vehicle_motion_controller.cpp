@@ -5,10 +5,18 @@ void ThrusteredVehicleMotionController::initializeThrusters(){
     initThrusters();
 }
 
+void ThrusteredVehicleMotionController::setYaw(int magnitude_in_percent){
+    yaw_magnitude_ = magnitude_in_percent;
 
+}
 
-void ThrusteredVehicleMotionController::doYaw(int yaw_magnitude_in_percent){
-    yaw_magnitude_ = yaw_magnitude_in_percent;
+void ThrusteredVehicleMotionController::resetYaw(){
+    setYaw(0);
+}
+
+void ThrusteredVehicleMotionController::doYaw(int magnitude_in_percent){
+
+    setYaw(magnitude_in_percent);
     updateThrusterValues();
 
 }
@@ -18,8 +26,17 @@ void ThrusteredVehicleMotionController::stopYaw(){
 
 }
 
-void ThrusteredVehicleMotionController::doPitch(int pitch_magnitude_in_percent){
-    pitch_magnitude_ = pitch_magnitude_in_percent;
+void ThrusteredVehicleMotionController::setPitch(int magnitude_in_percent){
+
+    pitch_magnitude_ = magnitude_in_percent;
+}
+void ThrusteredVehicleMotionController::resetPitch(){
+
+    setPitch (0);
+}
+
+void ThrusteredVehicleMotionController::doPitch(int magnitude_in_percent){
+    setPitch(magnitude_in_percent);
     updateThrusterValues();
 
 }
@@ -30,9 +47,21 @@ void ThrusteredVehicleMotionController::stopPitch(){
 }
 
 
-void ThrusteredVehicleMotionController::doRoll(int roll_magnitude_in_percent){
-    roll_magnitude_ = roll_magnitude_in_percent;
+
+void ThrusteredVehicleMotionController::setRoll(int magnitude_in_percent){
+    roll_magnitude_ = magnitude_in_percent;
+   
+}
+void ThrusteredVehicleMotionController::resetRoll(){
+    
+    setRoll(0);
+   
+}
+void ThrusteredVehicleMotionController::doRoll(int magnitude_in_percent){
+
+    setRoll(magnitude_in_percent);
     updateThrusterValues();
+   
 
 }
 
@@ -41,20 +70,40 @@ void ThrusteredVehicleMotionController::stopRoll(){
 
 }
 
+void ThrusteredVehicleMotionController::setSurge(int magnitude_in_percent){
+    
+    surge_magnitude_ =  magnitude_in_percent;
+}
 
-void ThrusteredVehicleMotionController::doSurge(int surge_magnitude_in_percent){
-    surge_magnitude_ = surge_magnitude_in_percent;
+void ThrusteredVehicleMotionController::resetSurge(){
+    
+    setSurge(0);
+}
+
+void ThrusteredVehicleMotionController::doSurge(int magnitude_in_percent){
+    
+    setSurge(magnitude_in_percent);
     updateThrusterValues();
 
 }
+
+
 
 void ThrusteredVehicleMotionController::stopSurge(){
     doSurge(0);
 
 }
 
-void ThrusteredVehicleMotionController::doSway(int sway_magnitude_in_percent){
-    sway_magnitude_ = sway_magnitude_in_percent;
+void ThrusteredVehicleMotionController::setSway(int magnitude_in_percent){
+    sway_magnitude_ = magnitude_in_percent;
+}
+
+void ThrusteredVehicleMotionController::resetSway(){
+    setSway(0);
+}
+
+void ThrusteredVehicleMotionController::doSway(int magnitude_in_percent){
+    setSway(magnitude_in_percent);
     updateThrusterValues();
 
 }
@@ -64,8 +113,16 @@ void ThrusteredVehicleMotionController::stopSway(){
 
 }
 
-void ThrusteredVehicleMotionController::doHeave(int heave_magnitude_in_percent){
-    heave_magnitude_ = heave_magnitude_in_percent;
+void ThrusteredVehicleMotionController::setHeave(int magnitude_in_percent){
+
+    heave_magnitude_ = magnitude_in_percent;
+}
+
+void ThrusteredVehicleMotionController::resetHeave(){
+    setHeave(0);
+}
+void ThrusteredVehicleMotionController::doHeave(int magnitude_in_percent){
+    setHeave(magnitude_in_percent);
     updateThrusterValues();
 
 }
@@ -75,8 +132,13 @@ void ThrusteredVehicleMotionController::stopHeave(){
 
 }
 
-void ThrusteredVehicleMotionController::stopAllThrusters(){
+
+void ThrusteredVehicleMotionController::resetAllThrusters(){
     heave_magnitude_ = surge_magnitude_ = sway_magnitude_ = pitch_magnitude_ = roll_magnitude_ = yaw_magnitude_ = 0;
+
+}
+void ThrusteredVehicleMotionController::stopAllThrusters(){
+    resetAllThrusters();
     updateThrusterValues();
 }
 

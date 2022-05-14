@@ -19,7 +19,7 @@ float target_yaw, current_yaw,current_pitch, current_roll, target_depth, current
 int main(int argc, char** argv){
 
     
-    ros_init(argc,argv);
+    //ros_init(argc,argv);
     
     cholan_motion_controller.initializeThrusters();
     std::thread yaw_thread(yaw_thread_funct);
@@ -28,10 +28,8 @@ int main(int argc, char** argv){
     
 
     while (true)
-    {
+    { 
         
-        cholan_motion_controller.setSurge(0);
-        cholan_motion_controller.setSway(0);
 
         switch (motion_command)
         {
@@ -54,7 +52,7 @@ int main(int argc, char** argv){
         case LEFT:
             if (!stopped)
             {
-                cholan_motion_controller.setSway(sway_magnitude);
+                //cholan_motion_controller.setSway(sway_magnitude);
                
             }
             break;
@@ -62,7 +60,7 @@ int main(int argc, char** argv){
         case RIGHT:
             if (!stopped)
             {
-                cholan_motion_controller.setSway(- sway_magnitude);
+                //cholan_motion_controller.setSway(- sway_magnitude);
                 
             }
             break;
@@ -109,7 +107,10 @@ int main(int argc, char** argv){
             
             break;
 
-    cholan_motion_controller.updateThrusterValues();
+        cholan_motion_controller.updateThrusterValues();
+        std::this_thread::sleep_for(std::chrono::seconds(1/REFRESH_RATE));
+        cholan_motion_controller.resetSurge();
+        cholan_motion_controller.resetSway();
 
         }
     
