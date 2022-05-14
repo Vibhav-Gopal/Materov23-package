@@ -48,6 +48,7 @@ void ros_init(int argc, char** argv){
 
     
     motion_command_sub    = (*nh).subscribe("motion_command",1,motionCommandCallBack);
+    sensor_data_sub       = (*nh).subscribe("sensor_data",1,sensorDataCallBack);
     
     pwm_values_pub = (*nh).advertise<materov22_pioneer::pwm_values_msg>("pwm_values",5);
 
@@ -69,3 +70,7 @@ void publishPWMValues(int* pwm_values){
     
     pwm_values_pub.publish(pwm_values_msg);
 } 
+
+void checkForCallBack(){
+    ros::spinOnce();
+}
