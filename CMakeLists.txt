@@ -23,7 +23,7 @@ add_message_files(
 
 include_directories(include 
 
-   ${catkin_INCLUDE_DIRECTORIES}
+   ${catkin_INCLUDE_DIRS}
 )
 
 add_subdirectory(src)

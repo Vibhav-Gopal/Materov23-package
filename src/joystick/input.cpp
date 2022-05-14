@@ -21,7 +21,7 @@
 #include<cmath>
 #include<vector>
 #include<sstream>
-#include"../motion_commands.h"
+#include"motion_commands.h"
 #define RAD2DEG 57.2975
 
 using namespace std;
