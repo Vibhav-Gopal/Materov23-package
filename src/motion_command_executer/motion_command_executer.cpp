@@ -19,7 +19,7 @@ float target_yaw, current_yaw,current_pitch, current_roll, target_depth, current
 int main(int argc, char** argv){
 
     
-    //ros_init(argc,argv);
+    ros_init(argc,argv);
     
     cholan_motion_controller.initializeThrusters();
     std::thread yaw_thread(yaw_thread_funct);
