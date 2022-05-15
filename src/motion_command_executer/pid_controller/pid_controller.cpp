@@ -7,8 +7,8 @@ PIDController::PIDController()
   kd_ = 5.0;
   ki_ = 0.01;
   snstvty_ = 0.002;
-  int_windup_limit_ = 5;
-  output_limit_ = 32;
+  int_windup_limit_ = 30;
+  output_limit_ = 100;
 
   p_ = 0;
   i_ = 0;
