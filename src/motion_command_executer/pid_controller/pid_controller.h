@@ -60,7 +60,7 @@ public:
    * 
    * @return PID output value
    */ 
-  double update(double _set_point, double _cur_state, double _dt);
+  int update(double _set_point, double _cur_state, double _dt);
 
   /**
    * @brief Resets the PID error terms to zero

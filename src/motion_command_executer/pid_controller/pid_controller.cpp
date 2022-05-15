@@ -1,5 +1,5 @@
 #include "pid_controller.h"
-
+#include  <iostream>
 
 PIDController::PIDController()
 {
@@ -16,7 +16,7 @@ PIDController::PIDController()
 }
 
 
-double PIDController::update(double _set_point, double _cur_state, double _dt)
+int PIDController::update(double _set_point, double _cur_state, double _dt)
 {
   _cur_state = f_round(_cur_state, 3);
 
@@ -52,7 +52,7 @@ double PIDController::update(double _set_point, double _cur_state, double _dt)
     output_ = -output_limit_;
   }
 
-  return output_;
+  return int(output_);
 }
 
 

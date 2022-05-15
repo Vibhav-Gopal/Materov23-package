@@ -5,7 +5,7 @@
 class ThrusteredVehicleMotionController
 {
 private:
-    int yaw_magnitude_,pitch_magnitude_,roll_magnitude_,surge_magnitude_,sway_magnitude_,heave_magnitude_ = 0;
+    int yaw_magnitude_ = 0,pitch_magnitude_ = 0,roll_magnitude_ = 0,surge_magnitude_ = 0,sway_magnitude_ = 0,heave_magnitude_ = 0;
     
     int yaw_vector_[THRUSTERS_NUMBER] = YAW_VECTOR, pitch_vector_[THRUSTERS_NUMBER] = PITCH_VECTOR, roll_vector_[THRUSTERS_NUMBER] = ROLL_VECOR,
     surge_vector_[THRUSTERS_NUMBER] = SURGE_VECTOR, sway_vector_[THRUSTERS_NUMBER] = SWAY_VECTOR,    heave_vector_[THRUSTERS_NUMBER] = HEAVE_VECTOR;

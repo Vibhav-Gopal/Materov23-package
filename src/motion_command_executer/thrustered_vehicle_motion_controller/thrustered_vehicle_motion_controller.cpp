@@ -1,5 +1,6 @@
 #include "thrustered_vehicle_motion_controller.h"
 #include "thrusters_controller/thrusters_controller.h"
+#include <iostream>
 
 void ThrusteredVehicleMotionController::initializeThrusters(){
     initThrusters();
@@ -145,9 +146,11 @@ void ThrusteredVehicleMotionController::stopAllThrusters(){
 void ThrusteredVehicleMotionController::updateThrusterValues(){
     for (int i = 0; i < THRUSTERS_NUMBER; i++)
     {
-        thruster_values_[i] = yaw_magnitude_*yaw_vector_[i] + pitch_magnitude_*pitch_vector_[i] + roll_magnitude_*roll_vector_[i] + surge_magnitude_*surge_vector_[i] + sway_magnitude_*sway_vector_[i] + heave_magnitude_*heave_vector_[i];
+
+        thruster_values_[i] = (yaw_magnitude_*yaw_vector_[i]) + (pitch_magnitude_*pitch_vector_[i]) + (roll_magnitude_*roll_vector_[i]) + (surge_magnitude_*surge_vector_[i]) + (sway_magnitude_*sway_vector_[i]) + (heave_magnitude_*heave_vector_[i]);
         thruster_values_[i] = thruster_values_[i] <= 100 ? thruster_values_[i] : 100;
         thruster_values_[i] = thruster_values_[i] >= -100 ? thruster_values_[i] : -100;
+        //std::cout<<"thruster values"<<thruster_values_[i]<<std::endl;
     }
     
     setThrustValues(thruster_values_);
