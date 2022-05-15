@@ -52,6 +52,9 @@ int PIDController::update(double _set_point, double _cur_state, double _dt)
     output_ = -output_limit_;
   }
 
+  //std::cout<<output_<<std::endl;
+  
+
   return int(output_);
 }
 
