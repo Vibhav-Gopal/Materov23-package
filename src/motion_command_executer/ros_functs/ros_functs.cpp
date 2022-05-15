@@ -4,6 +4,7 @@
 #include "materov22_pioneer/pwm_values_msg.h"
 #include "materov22_pioneer/motion_command_msg.h"
 #include "materov22_pioneer/sensor_data_msg.h"
+#include "std_msgs/Bool.h"
 
 
 
@@ -11,10 +12,11 @@ extern  float target_yaw,target_depth,current_yaw,current_pitch,current_roll,cur
 extern int motion_command;
 
 ros::Subscriber sensor_data_sub,motion_command_sub;
-ros::Publisher pwm_values_pub;
+ros::Publisher pwm_values_pub,led_state_pub;
 
 materov22_pioneer::motion_command_msg motion_command_msg;
 materov22_pioneer::sensor_data_msg    sensor_data_msg;
+std_msgs::Bool     led_state_msg;
 
 ros:: NodeHandle* nh;
 materov22_pioneer::pwm_values_msg pwm_values_msg;
@@ -51,6 +53,7 @@ void ros_init(int argc, char** argv){
     sensor_data_sub       = (*nh).subscribe("sensor_data",1,sensorDataCallBack);
     
     pwm_values_pub = (*nh).advertise<materov22_pioneer::pwm_values_msg>("pwm_values",5);
+    led_state_pub  = (*nh).advertise<std_msgs::Bool>("led_state",1);
 
    
 
@@ -70,6 +73,12 @@ void publishPWMValues(int* pwm_values){
     
     pwm_values_pub.publish(pwm_values_msg);
 } 
+
+void changeLEDState(bool on_or_off){
+    led_state_msg.data = on_or_off;
+    led_state_pub.publish(led_state_msg);
+
+}
 
 void checkForCallBack(){
     ros::spinOnce();
