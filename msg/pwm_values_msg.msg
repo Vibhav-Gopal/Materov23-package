@@ -1,1 +1,1 @@
-int8[4] values
+int16[4] values
