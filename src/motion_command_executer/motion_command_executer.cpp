@@ -3,13 +3,14 @@
 #include  "pid_controller/pid_controller.h"
 #include  "motion_commands.h"
 #include  "ros_functs.h"
+#include  "ros/ros.h"
 
 #include <thread>
 #include <chrono>
 #include <iostream>
 
 
-int motion_command,surge_magnitude,sway_magnitude;
+int motion_command = FORWARD,surge_magnitude,sway_magnitude;
 int prev_command;
 bool stopped = false,updated_thrusters = false;
 ThrusteredVehicleMotionController cholan_motion_controller;
@@ -25,8 +26,7 @@ int main(int argc, char** argv){
     std::thread yaw_thread(yaw_thread_funct);
     std::thread heave_thread(heave_thread_funct);
 
-    
-
+ 
     while (true)
     { 
         
@@ -106,14 +106,15 @@ int main(int argc, char** argv){
         default:
             
             break;
+        
+
+        }
 
         cholan_motion_controller.updateThrusterValues();
         std::this_thread::sleep_for(std::chrono::seconds(1/REFRESH_RATE));
         cholan_motion_controller.resetSurge();
         cholan_motion_controller.resetSway();
         checkForCallBack();
-
-        }
     
     }
 
