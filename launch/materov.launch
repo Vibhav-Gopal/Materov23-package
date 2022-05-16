@@ -2,6 +2,12 @@
 
     <node name = "input" pkg = "materov22_pioneer" type = "input"/>
 
+    <node name = "motion_command_executer" pkg = "materov22_pioneer" type = "motion_command_executer"/>
+    
+    <node name = "serialnode" pkg = "rosserial_arduino" type = "serial_node.py">
+    <param name="port" value="/dev/ttyACM1"/>
+    </node>
+
     <node name = "web_video_server" pkg = "web_video_server" type = "web_video_server"/>
 
     <node name = "rosbride_websocket" pkg = "rosbridge_server" type = "rosbridge_websocket"/>
