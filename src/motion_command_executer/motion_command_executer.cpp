@@ -11,7 +11,7 @@
 
 
 
-int motion_command = LIGHTS_ON,surge_magnitude = 0,sway_magnitude = 0,heave_magnitude = 0, yaw_magnitude = 0;
+int motion_command = LIGHTS_ON,surge_magnitude = 50,sway_magnitude = 50,heave_magnitude = 10, yaw_magnitude = 30;
 bool stopped = false,updated_thrusters = false,pid_enabled = false;
 
 
@@ -74,13 +74,15 @@ int main(int argc, char** argv){
             if(pid_enabled)
                 target_depth += 0.1;
             else
+                heave_magnitude += 10;
                 cholan_motion_controller.setHeave(heave_magnitude);
             break;
 
         case DOWN:
             if(pid_enabled)
-                target_depth += 0.1;
+                target_depth -= 0.1;
             else
+                heave_magnitude -= 10;
                 cholan_motion_controller.setHeave(heave_magnitude);
             break;
 
@@ -93,9 +95,9 @@ int main(int argc, char** argv){
 
         case YAW_RIGHT:
             if(pid_enabled)
-                target_yaw += 0.1;
+                target_yaw -= 0.1;
             else
-                cholan_motion_controller.setYaw(yaw_magnitude);
+                cholan_motion_controller.setYaw(-yaw_magnitude);
             break;
         
         case STOP:
