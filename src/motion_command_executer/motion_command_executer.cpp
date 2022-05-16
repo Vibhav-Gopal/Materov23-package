@@ -11,7 +11,7 @@
 
 
 
-int motion_command = LIGHTS_ON,surge_magnitude = 50,sway_magnitude = 50,heave_magnitude = 10, yaw_magnitude = 30;
+int motion_command = LIGHTS_ON,surge_magnitude = 50,sway_magnitude = 50,heave_magnitude = 20, yaw_magnitude = 30;
 bool stopped = false,updated_thrusters = false,pid_enabled = false;
 
 
