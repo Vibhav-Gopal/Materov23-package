@@ -70,45 +70,66 @@ int main(int argc, char** argv){
 
         case UP:
             if(!stopped){
-                if(pid_enabled)
+                if(pid_enabled){
                     target_depth += 0.1;
-                else
-                    heave_magnitude += 10;
-                    cholan_motion_controller.setHeave(heave_magnitude);
-                break;
+                }
+                else{
+                    if (heave_magnitude <= 90 && heave_magnitude >= -90)
+                    {
+                         heave_magnitude += 10;
+                        cholan_motion_controller.setHeave(heave_magnitude);
+                    }
+                }  
+                   
+            
             }
+            break;
             
 
         case DOWN:
-        if(!stopped){
-            if(pid_enabled)
-                target_depth -= 0.1;
-            else
-                heave_magnitude -= 10;
-                cholan_motion_controller.setHeave(heave_magnitude);
+
+            if(!stopped){
+                if(pid_enabled){
+                    target_depth -= 0.1;
+                }
+                else
+                    if (heave_magnitude <= 90 && heave_magnitude >= -90)
+                        {
+                            heave_magnitude += 10;
+                            cholan_motion_controller.setHeave(heave_magnitude);
+                        }
+            }
             break;
-        }
+
         case YAW_LEFT:
-        if(!stopped){
-            if(pid_enabled)
-                target_yaw += 0.1;
-            else
-                cholan_motion_controller.setYaw(yaw_magnitude);
+
+            if(!stopped){
+
+                if(pid_enabled)
+                    target_yaw += 0.1;
+                else
+                    cholan_motion_controller.setYaw(yaw_magnitude);
+                
+            }
             break;
-        }
+
         case YAW_RIGHT:
-        if(!stopped){
-            if(pid_enabled)
-                target_yaw -= 0.1;
-            else
-                cholan_motion_controller.setYaw(-yaw_magnitude);
+
+            if(!stopped){
+                if(pid_enabled)
+                    target_yaw -= 0.1;
+                else
+                    cholan_motion_controller.setYaw(-yaw_magnitude);
+               
+            }
             break;
-        }
+
         case SPRINT:
-        if(!stopped){
-            cholan_motion_controller.setSurge(80);
+
+            if(!stopped){
+                cholan_motion_controller.setSurge(80);    
+            }
             break;
-        }
         case LIGHTS_ON:
             changeLEDState(true);
             break;

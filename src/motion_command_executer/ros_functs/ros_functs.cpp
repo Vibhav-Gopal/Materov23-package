@@ -26,7 +26,6 @@ materov22_pioneer::pwm_values_msg pwm_values_msg;
 
 void motionCommandCallBack(const  materov22_pioneer::motion_command_msgConstPtr& motion_command_msg ){
 
-    std::cout<<"motion command called";
     motion_command   = motion_command_msg->command;
     if (motion_command == TURN_TO_GIVEN_DIRECTION )
     {
@@ -51,8 +50,8 @@ void ros_init(int argc, char** argv){
     nh = new ros::NodeHandle;
 
     
-    motion_command_sub    = (*nh).subscribe("motion_command",1,motionCommandCallBack);
-    sensor_data_sub       = (*nh).subscribe("sensor_data",1,sensorDataCallBack);
+    motion_command_sub    = (*nh).subscribe("motion_command",10,motionCommandCallBack);
+    sensor_data_sub       = (*nh).subscribe("sensor_data",10,sensorDataCallBack);
     
     pwm_values_pub = (*nh).advertise<materov22_pioneer::pwm_values_msg>("pwm_values",5);
     led_state_pub  = (*nh).advertise<std_msgs::Bool>("led_state",1);
