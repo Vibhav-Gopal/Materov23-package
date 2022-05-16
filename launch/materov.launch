@@ -8,6 +8,8 @@
     <param name="port" value="/dev/ttyACM1"/>
     </node>
 
+    <include ns="camera_node" file="$(find materov22_pioneer)/src/camera/launch/elp.launch" />
+
     <node name = "web_video_server" pkg = "web_video_server" type = "web_video_server"/>
 
     <node name = "rosbride_websocket" pkg = "rosbridge_server" type = "rosbridge_websocket"/>
