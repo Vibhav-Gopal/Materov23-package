@@ -11,8 +11,8 @@
 
 
 
-int motion_command = LIGHTS_ON,surge_magnitude = 0,sway_magnitude = 0;
-bool stopped = false,updated_thrusters = false;
+int motion_command = LIGHTS_ON,surge_magnitude = 0,sway_magnitude = 0,heave_magnitude = 0, yaw_magnitude = 0;
+bool stopped = false,updated_thrusters = false,pid_enabled = false;
 
 
 ThrusteredVehicleMotionController cholan_motion_controller;
@@ -71,24 +71,38 @@ int main(int argc, char** argv){
 
 
         case UP:
-            target_depth += 0.1;
+            if(pid_enabled)
+                target_depth += 0.1;
+            else
+                cholan_motion_controller.setHeave(heave_magnitude);
             break;
 
         case DOWN:
-            target_depth -= 0.1;
+            if(pid_enabled)
+                target_depth += 0.1;
+            else
+                cholan_motion_controller.setHeave(heave_magnitude);
             break;
 
         case YAW_LEFT:
-            target_yaw += 10;
+            if(pid_enabled)
+                target_yaw += 0.1;
+            else
+                cholan_motion_controller.setYaw(yaw_magnitude);
             break;
 
         case YAW_RIGHT:
-            target_yaw -= 10;
+            if(pid_enabled)
+                target_yaw += 0.1;
+            else
+                cholan_motion_controller.setYaw(yaw_magnitude);
             break;
         
         case STOP:
-            cholan_motion_controller.stopAllThrusters();
             stopped = true;
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+            cholan_motion_controller.stopAllThrusters();
+            
             break;
 
         case RESUME:
@@ -139,7 +153,7 @@ void yaw_thread_funct(){
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
      
-     while (!stopped)
+     while ( (!stopped) && (pid_enabled) )
      {   
          
         end = std::chrono::steady_clock::now();
@@ -167,7 +181,7 @@ void heave_thread_funct(){
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
      
-     while (!stopped)
+     while ((!stopped) && (pid_enabled))
      {   
          
         end = std::chrono::steady_clock::now();
