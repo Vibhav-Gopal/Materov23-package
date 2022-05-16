@@ -11,7 +11,7 @@
 
 
 
-int motion_command = LIGHTS_ON,surge_magnitude = 50,sway_magnitude = 50,heave_magnitude = 20, yaw_magnitude = 30;
+int motion_command = 20,surge_magnitude = 50,sway_magnitude = 50,heave_magnitude = 20, yaw_magnitude = 30;
 bool stopped = false,updated_thrusters = false,pid_enabled = false;
 
 
@@ -33,8 +33,6 @@ int main(int argc, char** argv){
  
     while (ros::ok())
     { 
-        
-
         switch (motion_command)
         {
         case FORWARD:
@@ -71,35 +69,54 @@ int main(int argc, char** argv){
 
 
         case UP:
-            if(pid_enabled)
-                target_depth += 0.1;
-            else
-                heave_magnitude += 10;
-                cholan_motion_controller.setHeave(heave_magnitude);
-            break;
+            if(!stopped){
+                if(pid_enabled)
+                    target_depth += 0.1;
+                else
+                    heave_magnitude += 10;
+                    cholan_motion_controller.setHeave(heave_magnitude);
+                break;
+            }
+            
 
         case DOWN:
+        if(!stopped){
             if(pid_enabled)
                 target_depth -= 0.1;
             else
                 heave_magnitude -= 10;
                 cholan_motion_controller.setHeave(heave_magnitude);
             break;
-
+        }
         case YAW_LEFT:
+        if(!stopped){
             if(pid_enabled)
                 target_yaw += 0.1;
             else
                 cholan_motion_controller.setYaw(yaw_magnitude);
             break;
-
+        }
         case YAW_RIGHT:
+        if(!stopped){
             if(pid_enabled)
                 target_yaw -= 0.1;
             else
                 cholan_motion_controller.setYaw(-yaw_magnitude);
             break;
-        
+        }
+        case SPRINT:
+        if(!stopped){
+            cholan_motion_controller.setSurge(80);
+            break;
+        }
+        case LIGHTS_ON:
+            changeLEDState(true);
+            break;
+
+        case LIGHTS_OFF:
+            changeLEDState(false);
+            break;
+
         case STOP:
             stopped = true;
             std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -136,7 +153,6 @@ int main(int argc, char** argv){
 
         cholan_motion_controller.resetSurge();
         cholan_motion_controller.resetSway();
-
         checkForCallBack();
     
     }

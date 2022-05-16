@@ -5,6 +5,7 @@
 #include "materov22_pioneer/motion_command_msg.h"
 #include "materov22_pioneer/sensor_data_msg.h"
 #include "std_msgs/Bool.h"
+#include <iostream>
 
 
 
@@ -25,6 +26,7 @@ materov22_pioneer::pwm_values_msg pwm_values_msg;
 
 void motionCommandCallBack(const  materov22_pioneer::motion_command_msgConstPtr& motion_command_msg ){
 
+    std::cout<<"motion command called";
     motion_command   = motion_command_msg->command;
     if (motion_command == TURN_TO_GIVEN_DIRECTION )
     {
