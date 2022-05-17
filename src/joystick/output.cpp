@@ -16,7 +16,7 @@ int main(int argc, char** argv)
 
     ros::Subscriber sub = nh.subscribe("/motion_command",100,callBack);
 
-    pub = nh.advertise<materov22_pioneer::motion_command_msg>("/motion_command",1000);
+    pub = nh.advertise<materov22_pioneer::motion_command_msg>("/commands",1000);
 
     ros::spin();
 
