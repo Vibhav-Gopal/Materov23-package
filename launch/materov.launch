@@ -2,13 +2,13 @@
 
     <node name = "input" pkg = "materov22_pioneer" type = "input"/>
 
-    <node name = "motion_command_executer" pkg = "materov22_pioneer" type = "motion_command_executer"/>
-    
-    <node name = "serialnode" pkg = "rosserial_arduino" type = "serial_node.py">
+    <!-- <node name = "motion_command_executer" pkg = "materov22_pioneer" type = "motion_command_executer"/>
+     -->
+    <!-- <node name = "serialnode" pkg = "rosserial_arduino" type = "serial_node.py">
     <param name="port" value="/dev/ttyAMA0"/>
-    </node>
+    </node> -->
 
-    <include ns="camera_node" file="$(find materov22_pioneer)/src/camera/launch/elp.launch" />
+    <!-- <include ns="camera_node" file="$(find materov22_pioneer)/src/camera/launch/elp.launch" /> -->
 
     <node name = "web_video_server" pkg = "web_video_server" type = "web_video_server"/>
 
