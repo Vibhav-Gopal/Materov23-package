@@ -5,7 +5,7 @@ using namespace std;
 
 void displayHelp(void)
 {
-    cout << "Commands : \n w - Forward \t s - backward \t a - left\t d - right \n i - up \t k - down \t j - yaw_left \t l - yaw_right \n x - stop \t r - resume \t n - lights on \t m - lights off \n q - turn to given angle \n" << endl;
+    cout << "Commands : \n w - Forward \t s - backward \t a - left\t d - right \n i - up \t k - down \t j - yaw_left \t l - yaw_right \t p - sprint \n x - stop \t r - resume \t n - lights on \t m - lights off \n q - turn to given angle \n" << endl;
 }
 
 int main(int argc, char** argv)
@@ -25,6 +25,7 @@ int main(int argc, char** argv)
 
     while (ros::ok())
     {
+        
         input = getchar();
 
         switch(input)
