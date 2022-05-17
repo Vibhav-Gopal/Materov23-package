@@ -8,6 +8,7 @@
 #include <thread>
 #include <chrono>
 #include <iostream>
+#include <ncurses.h>
 
 
 
@@ -29,10 +30,13 @@ int main(int argc, char** argv){
 
     std::thread yaw_thread(yaw_thread_funct);
     std::thread heave_thread(heave_thread_funct);
+    initscr();
+    cbreak();
 
  
     while (ros::ok())
     { 
+        motion_command = getch();
         switch (motion_command)
         {
         case FORWARD:
@@ -182,7 +186,7 @@ int main(int argc, char** argv){
 
     yaw_thread.join();
     heave_thread.join();
-    
+    endwin();
 }
 
 
