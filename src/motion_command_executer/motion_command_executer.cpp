@@ -78,6 +78,7 @@ int main(int argc, char** argv){
                     {
                          heave_magnitude += 10;
                         cholan_motion_controller.setHeave(heave_magnitude);
+                        motion_command = 20;
                     }
                 }  
                    
@@ -97,6 +98,7 @@ int main(int argc, char** argv){
                         {
                             heave_magnitude += 10;
                             cholan_motion_controller.setHeave(heave_magnitude);
+                            motion_command = 20;
                         }
             }
             break;
@@ -167,7 +169,6 @@ int main(int argc, char** argv){
         
 
         }
-        motion_command = 20;
         cholan_motion_controller.updateThrusterValues();
 
         std::this_thread::sleep_for(std::chrono::milliseconds(1000/REFRESH_RATE));
