@@ -170,7 +170,7 @@ int main(int argc, char** argv){
 
         cholan_motion_controller.updateThrusterValues();
 
-        std::this_thread::sleep_for(std::chrono::seconds(1/REFRESH_RATE));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000/REFRESH_RATE));
 
         cholan_motion_controller.resetSurge();
         cholan_motion_controller.resetSway();
@@ -202,10 +202,10 @@ void yaw_thread_funct(){
         pid_output = pid_yaw.update(target_yaw,current_yaw,dt);
 
         std::cout<<pid_output<<std::endl;
-        cholan_motion_controller.setYaw(pid_output);
+        //cholan_motion_controller.setYaw(pid_output);
 
         begin = std::chrono::steady_clock::now();
-        std::this_thread::sleep_for(std::chrono::milliseconds((1000/REFRESH_RATE)));
+        std::this_thread::sleep_for(std::chrono::milliseconds((100)));
 
      }
      
@@ -229,7 +229,7 @@ void heave_thread_funct(){
 
         pid_output = pid_heave.update(target_depth,current_depth, dt);
         
-        cholan_motion_controller.setHeave(pid_output);
+        //cholan_motion_controller.setHeave(pid_output);
 
         begin = std::chrono::steady_clock::now();
         std::this_thread::sleep_for(std::chrono::milliseconds((1000/REFRESH_RATE)));
