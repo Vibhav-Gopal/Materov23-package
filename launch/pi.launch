@@ -9,12 +9,5 @@
 
     <node name = "motion_command_executer" pkg = "materov22_pioneer" type = "motion_command_executer"/>
 
-<<<<<<< HEAD
     <include ns="camera_node" file="$(find materov22_pioneer)/src/camera/launch/elp.launch" /> 
 </launch>
-=======
-    <include ns="camera_node" file="$(find materov22_pioneer)/src/camera/launch/elp.launch" />    
-
-
-</launch>
->>>>>>> 76bc4df86571e4aa14458f3a7954ef592f5e4614
