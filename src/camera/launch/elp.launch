@@ -16,9 +16,9 @@
 
     <!-- <param name="camera_info_url" value="file://$(find my_camera)/config/elp.yaml"/> -->
 
-    <include ns="pi" file="$(find materov22_pioneer)/launch/pi.launch"/>
-
+    
   </node>
 
+  <include ns="pi" file="$(find materov22_pioneer)/launch/pi.launch"/>
 
 </launch>
