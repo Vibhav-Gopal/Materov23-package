@@ -167,13 +167,14 @@ int main(int argc, char** argv){
         
 
         }
-
+        motion_command = 20;
         cholan_motion_controller.updateThrusterValues();
 
         std::this_thread::sleep_for(std::chrono::milliseconds(1000/REFRESH_RATE));
 
         cholan_motion_controller.resetSurge();
         cholan_motion_controller.resetSway();
+        cholan_motion_controller.resetYaw();
         checkForCallBack();
     
     }
