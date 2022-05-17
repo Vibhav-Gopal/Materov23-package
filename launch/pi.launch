@@ -1,0 +1,19 @@
+<launch>
+
+   
+    <node name = "serialnode" pkg = "rosserial_arduino" type = "serial_node.py">
+    <param name="port" value="/dev/ttyUSB0"/>
+    
+    <node name = "input" pkg = "materov22_pioneer" type = "input"/>
+
+    <node name = "motion_command_executer" pkg = "materov22_pioneer" type = "motion_command_executer"/>
+
+    <node name = "rosbride_websocket" pkg = "rosbridge_server" type = "rosbridge_websocket"/>
+    
+    <node name = "web_video_server" pkg = "web_video_server" type = "web_video_server"/>
+
+    <include ns="camera_node" file="$(find materov22_pioneer)/src/camera/launch/elp.launch" />    
+  
+  </node>
+
+</launch>
