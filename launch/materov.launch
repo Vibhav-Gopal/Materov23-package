@@ -1,6 +1,6 @@
 <launch>
 
-    <node name = "input" pkg = "materov22_pioneer" type = "input"/>
+    <!-- <node name = "input" pkg = "materov22_pioneer" type = "input"/> -->
 
     <!-- <node name = "motion_command_executer" pkg = "materov22_pioneer" type = "motion_command_executer"/>
      -->
