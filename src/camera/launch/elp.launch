@@ -19,6 +19,4 @@
     
   </node>
 
-  <include ns="pi" file="$(find materov22_pioneer)/launch/pi.launch"/>
-
 </launch>
