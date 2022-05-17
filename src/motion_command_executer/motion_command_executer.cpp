@@ -78,12 +78,13 @@ int main(int argc, char** argv){
                     target_depth += 0.1;
                 }
                 else{
-                    if (heave_magnitude <= 90 && heave_magnitude >= -90)
+                    if (heave_magnitude <= 90)
                     {
                          heave_magnitude += 10;
                         cholan_motion_controller.setHeave(heave_magnitude);
                         motion_command = 20;
                     }
+                    
                 }  
                    
             
@@ -98,9 +99,9 @@ int main(int argc, char** argv){
                     target_depth -= 0.1;
                 }
                 else
-                    if (heave_magnitude <= 90 && heave_magnitude >= -90)
+                    if ( heave_magnitude >= -90)
                         {
-                            heave_magnitude += 10;
+                            heave_magnitude -= 10;
                             cholan_motion_controller.setHeave(heave_magnitude);
                             motion_command = 20;
                         }
