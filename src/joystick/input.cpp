@@ -17,6 +17,7 @@
 #include"ros/ros.h"
 #include"std_msgs/String.h"
 #include "materov22_pioneer/motion_command_msg.h"
+#include"../thrustered_vehicle_motioncontroller/thrustered_vehicle_motion_controller.h"
 #include<iostream>
 #include<cmath>
 #include<vector>
@@ -44,6 +45,8 @@ int main(int argc, char** argv)
   std::vector<int>arr_3;
 
   std::vector<int>arr_4;
+
+  ThrusteredVehicleMotionController obj;
   
   float x,y,z;
 
@@ -74,6 +77,8 @@ int main(int argc, char** argv)
           i.command = UP;
 
           pub.publish(i);
+
+          obj.setHeaveThrust(100);
         }
 
         //R1 - Down
@@ -82,6 +87,8 @@ int main(int argc, char** argv)
           i.command = DOWN;
 
           pub.publish(i);
+
+          obj.setHeaveThrust(-100);
         }
 
         //L2 - Yaw left
