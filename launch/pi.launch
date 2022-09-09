@@ -7,5 +7,5 @@
     
     <!-- <node name = "output" pkg = "materov22_pioneer" type = "output"/> -->
 
-    <node name = "motion_command_executer" pkg = "materov22_pioneer" type = "motion_command_executer"/>
+    <!-- <node name = "motion_command_executer" pkg = "materov22_pioneer" type = "motion_command_executer"/> -->
 </launch>

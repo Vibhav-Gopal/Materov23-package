@@ -49,7 +49,10 @@ def process(stet):
     elif data[2]<0 and data[3]>0:
         rightangle = 270-rightangle
 
-    ltstrength = (data[4]+1)//2
-    rtstrength = (data[5]+1)//2   
-
+    ltstrength = (data[4]+1)/2
+    rtstrength = (data[5]+1)/2   
+    temp = [leftangle,lstrength, rightangle, rstrength, ltstrength,rtstrength]
+    for i in range(len(temp)):
+        temp[i] = round(temp[i],2)
+    leftangle,lstrength, rightangle, rstrength, ltstrength,rtstrength = temp
     return leftangle,lstrength, rightangle, rstrength, ltstrength,rtstrength

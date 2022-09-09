@@ -14,4 +14,8 @@
 
     <node name = "rosbride_websocket" pkg = "rosbridge_server" type = "rosbridge_websocket"/>
 
+    <node name="processor" pkg = "materov22_pioneer" type="processor.py">
+
+    <node name="stick" pkg = "materov22_pioneer" type="stick.py">
+
 </launch>

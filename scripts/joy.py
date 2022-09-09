@@ -1,29 +1,24 @@
-from concurrent.futures import process
+#!/usr/bin/env python3
 import os
-
-os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 
 LOG = True
 TYPE = None
 
-
 class JoystickException(Exception):
     pass
-
 
 def log(*x):
     if LOG:
         print(*x)
 
-
 def log_state(state, state_labels):
-    print("\033[2J")  # clear screen
+    print('\033[2J')  # clear screen
     for value, label in zip(state, state_labels):
         print(round(value, 2), label)
 
-
-def ping_test(event, state, state_labels):
+def ping_test(state, state_labels):
     log_state(state, state_labels)
 
 
@@ -50,11 +45,8 @@ def generate_labels(js: pygame.joystick.Joystick, type=TYPE):
                 "Select",
                 "Start",
                 "Left Stick Button",
-                "Right Stick Button",
-            ] + (
-                ["Unknown"]
-                * (17 - (js.get_numaxes() + js.get_numhats() * 4 + js.get_numbuttons()))
-            )
+                "Right Stick Button"
+            ] + (["Unknown"] * (17 - (js.get_numaxes() + js.get_numhats() * 4 + js.get_numbuttons())))
 
     return (
         [f"Axis {x}" for x in range(js.get_numaxes())]
@@ -69,9 +61,8 @@ def generate_labels(js: pygame.joystick.Joystick, type=TYPE):
 
 def ping(func, joystick_id=0):
     """
-    input is a callback function,
-    which is called with the current state as its updated,
-    along with an event whenever it occurs.
+    input is a callback function, 
+    which is called with the current state as its updated
     """
 
     pygame.init()
@@ -96,13 +87,8 @@ def ping(func, joystick_id=0):
         type = "360"
 
     state_labels = generate_labels(js, type)
-    axis_start, hat_start, button_start = (
-        0,
-        js.get_numaxes(),
-        js.get_numaxes() + js.get_numhats() * 4,
-    )
+    axis_start, hat_start, button_start = 0, js.get_numaxes(), js.get_numaxes() + js.get_numhats() * 4
     state = [0] * (js.get_numaxes() + js.get_numhats() * 4 + js.get_numbuttons())
-    processed_event = None
 
     _hat_lookup = {-1: (1, 0), 0: (0, 0), 1: (0, 1)}
 
@@ -110,25 +96,17 @@ def ping(func, joystick_id=0):
         return [x for y in hat_value for x in _hat_lookup[y]]
 
     def update_state(event: pygame.event):
-        global processed_event
         if event.instance_id != joystick_id:
             return
         if event.type == pygame.JOYAXISMOTION:
-            processed_event = (axis_start + event.axis, event.value)
+            state[axis_start + event.axis] = event.value
         elif event.type == pygame.JOYBUTTONDOWN:
-            processed_event = (button_start + event.button, 1)
+            state[button_start + event.button] = 1
         elif event.type == pygame.JOYBUTTONUP:
-            processed_event = (button_start + event.button, 0)
+            state[button_start + event.button] = 0
         else:
-            # update all 4 buttons on hat change
-            processed_event = None
             index = hat_start + event.hat
-            expanded_hat = expand_hat(event.value)
-            state[index : index + 4] = expanded_hat
-            for i, hat in enumerate(expanded_hat):
-                func(((index + i), hat), state, state_labels)
-            return
-        state[processed_event[0]] = processed_event[1]
+            state[index : index + 4] = expand_hat(event.value)
 
     try:
         while True:
@@ -142,8 +120,7 @@ def ping(func, joystick_id=0):
             )
             for event in events:
                 update_state(event)
-                if processed_event:
-                    func(processed_event, state, state_labels)
+                func(state, state_labels)
     except KeyboardInterrupt:
         pass
     finally:

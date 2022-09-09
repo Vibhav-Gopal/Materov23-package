@@ -15,7 +15,7 @@ import signal
 # DOWN is 180 degrees
 # LEFT is 270 degrees
 
-dat = rospy.Publisher("joydata",String, queue_size=1000)
+dat = rospy.Publisher("/joydata",String, queue_size=1000)
 
 def handler(signum, frame):
     
@@ -25,13 +25,22 @@ signal.signal(signal.SIGINT, handler)
 
 def callback(state,state_labels):
     
-    print("State is",state)
+    
 
     #ljoy,ljoystr,rjoy,rjoystr,ltrig,rtrig = process(state)
     finData = list()
     finData = process(state)
+    
+    
+    tempLis = state
+    for i in range(len(tempLis)):
+        tempLis[i] = round(tempLis[i],2)
+        
+    finData = tempLis
+    
     finData = list(map(str,finData))
     dataString = '_'.join(finData)
+    print("Data is",dataString)
     sender(dataString)    
 
 def sender(toSend):
