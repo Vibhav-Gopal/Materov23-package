@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys
-sys.path.append('/home/madhav/MATE_ROV/Packages/materov_ws/devel/lib')
+sys.path.append('/home/r2d2/mrov_ws/devel/lib/')
 import rospy
 import motion_controller as m
 from std_msgs.msg import String
@@ -9,6 +9,8 @@ cholan = m.ThrusteredVehicleMotionController()
 cholan.setHeaveControlMode(1)
 cholan.setSurgeControlMode(1)
 cholan.setYawControlMode(1)
+
+
 #help(m)
 def mul(x):
     return 100*x
