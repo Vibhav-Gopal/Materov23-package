@@ -61,11 +61,17 @@ def call(data):
     # yaw = lis[2]
     
     # reset = lis[10]
+
+## Left joy front - forward
+## Left joy left - translate left
+## Right joy front - pitch down
+## Right joy left - yaw left
+
     heave_up = data.right_trigger #right trigger moves bot upwards towards surface
     heave_down = data.left_trigger
     heave = heave_up - heave_down
     
-    sway = data.vals.ax0
+    sway = data.vals.ax0 
 
     surge = data.vals.ax1
 
