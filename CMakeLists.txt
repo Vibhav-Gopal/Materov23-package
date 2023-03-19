@@ -14,6 +14,8 @@ add_message_files(
    motion_command_msg.msg
    pwm_values_msg.msg
    sensor_data_msg.msg
+controller.msg
+axes.msg
  )
 
  generate_messages(

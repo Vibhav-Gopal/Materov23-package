@@ -5,10 +5,10 @@ import motion_controller as m
 import rospy
 from std_msgs.msg import String,Float32
 bot = m.ThrusteredVehicleMotionController()
-
+reset=0
 bot.setHeaveControlMode(1)
 bot.setSurgeControlMode(1)
-bot.setYawControlMode(1)
+bot.setSwayControlMode(1)
 
 bot.setYawControlMode(0)
 bot.setRollControlMode(0)
@@ -16,16 +16,24 @@ bot.setPitchControlMode(0)
 
 bot.resetAllThrusters()
 
-# bot.setTargetYawAngle(0)
-# bot.setTargetRollValue(0)
-# bot.setTargetPitchValue(0)
+bot.setTargetYawAngle(0)
+bot.setTargetRollValue(0)
+bot.setTargetPitchValue(0)
 
 
-angle_sensitivity = 2 
+angle_sensitivity_yaw = 2 
+angle_sensitivity_roll = 2 
+angle_sensitivity_pitch = 2 
+
 yaw_joystick:int
 roll_joystick:int
 pitch_joystick:int
 
+multiplier_heave = 1
+multiplier_sway = 1
+multiplier_surge = 1
+
+buffer_multiplier = 0.07
 current_angle_yaw = current_angle_roll = current_angle_pitch = 0 # values to rotate the bot to, input from joystick
 
 
@@ -34,53 +42,85 @@ def mul(x):
     return 100*x
 def call(data):
     
-    lis = data.data.split('_')
-    lis = list(map(float,lis))
-    lis = list(map(mul,lis))
-    lis[5] = lis[5]+100
-    lis[5]  = lis[5]/2
-    lis[5] = round(lis[5])
-    lis[5] = -1*lis[5]
+    # lis = data.data.split('_')
+    # lis = list(map(float,lis))
+    # lis = list(map(mul,lis))
+    # lis[5] = lis[5]+100
+    # lis[5]  = lis[5]/2
+    # lis[5] = round(lis[5])
+    # lis[5] = -1*lis[5]
     
-    lis[4] = lis[4]+100
-    lis[4]  = lis[4]/2
-    lis[4] = round(lis[4])
+    # lis[4] = lis[4]+100
+    # lis[4]  = lis[4]/2
+    # lis[4] = round(lis[4])
     
-    lis[1] = -1*lis[1]
+    # lis[1] = -1*lis[1]
     
-    thrust = lis[4]+lis[5]
-    surge = lis[1]
-    yaw = lis[2]
+    # thrust = lis[4]+lis[5]
+    # surge = lis[1]
+    # yaw = lis[2]
     
-    reset = lis[10]
+    # reset = lis[10]
+    heave_up = data.right_trigger #right trigger moves bot upwards towards surface
+    heave_down = data.left_trigger
+    heave = heave_up - heave_down
+    
+    sway = data.vals.ax0
 
-    if(reset ==100):
+    surge = data.vals.ax1
+
+    yaw_joystick = data.vals.ax2
+
+    pitch_joystick = data.vals.ax3
+
+    if(reset ==1):
         bot.resetAllThrusters()
 
     
-    if int(thrust) >= -7 and int(thrust) <=7:
-        thrust =0
+
+    heave*=multiplier_heave
+    sway*=multiplier_sway
+    surge*=multiplier_surge
+
+## Within 7% of the signal, the response is zero, so stick drift can be avoided (not the best way)
+    if (heave) >= -(buffer_multiplier*multiplier_heave) and (heave) <=(buffer_multiplier*multiplier_heave):
+        heave =0
         
-    if int(surge) >= -7 and int(surge) <=7:
+    if (surge) >= (buffer_multiplier*multiplier_surge) and (surge) <= (buffer_multiplier*multiplier_surge):
         surge =0
         
-    if int(yaw) >= -7 and int(yaw) <=7:
-        yaw =0
-    bot.setHeaveThrust(thrust)
+    if (sway) >= (buffer_multiplier*multiplier_sway) and (sway) < (buffer_multiplier*multiplier_sway):
+        sway =0
+
+## TODO 
+## Change below code to buffer angle values
+    # if (heave) >= -(buffer_multiplier*multiplier_heave) and (heave) <=(buffer_multiplier*multiplier_heave):
+    #     heave =0
+        
+    # if (surge) >= (buffer_multiplier*multiplier_surge) and (surge) <= (buffer_multiplier*multiplier_surge):
+    #     surge =0
+        
+    # if (sway) >= (buffer_multiplier*multiplier_sway) and (sway) < (buffer_multiplier*multiplier_sway):
+    #     sway =0
+
+
+    bot.setHeaveThrust(heave)
     bot.setSurgeThrust(surge)
-    bot.setYawThrust(yaw)
-    ## get yaw input from joystick
-    ## put buffer on input values (zero from -7 to 7)
-    current_angle_yaw += yaw_joystick*angle_sensitivity
-    current_angle_roll += roll_joystick*angle_sensitivity
-    current_angle_pitch += pitch_joystick*angle_sensitivity
+    bot.setSwayThrust(sway)
+
+    ## put buffer on input values
+
+    current_angle_yaw += yaw_joystick*angle_sensitivity_yaw
+    current_angle_roll += roll_joystick*angle_sensitivity_roll
+    current_angle_pitch += pitch_joystick*angle_sensitivity_pitch
+
     bot.setTargetYawAngle(current_angle_yaw)
     bot.setTargetRollAngle(current_angle_roll)
     bot.setTargetPitchAngle(current_angle_pitch)
 
     bot.updateThrustValues()
     bot.refresh()
-    print("Thrust:",thrust,"Surge:",surge,"Yaw",yaw,"Reset-",reset)
+    print("Thrust:",heave,"Surge:",surge,"Yaw",yaw,"Reset-",reset)
 
 
     
@@ -101,6 +141,8 @@ def rot_pitch(data):
     bot.updateThrustValues()
     bot.refresh()
 
+# TODO
+# refractor code to have yaw roll pitch updating in same method
 
 rospy.init_node("Bot")
 rospy.Subscriber('/joydata', String,call)
