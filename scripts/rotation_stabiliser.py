@@ -120,7 +120,7 @@ def call(data):
 
     bot.updateThrustValues()
     bot.refresh()
-    print("Thrust:",heave,"Surge:",surge,"Yaw",yaw,"Reset-",reset)
+    print("Thrust:",heave,"Surge:",surge,"Sway",sway,"Reset-",reset)
 
 
     
