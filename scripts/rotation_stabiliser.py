@@ -10,8 +10,8 @@
 # dpad left - pitch reset
 # dpad right - yaw hold
 
-from pickle import FALSE
 import sys
+from time import sleep
 sys.path.append('/home/r2d2/mrov_ws/devel/lib/')
 import motion_controller as m
 import rospy
@@ -23,30 +23,32 @@ bot.setHeaveControlMode(1)
 bot.setSurgeControlMode(1)
 bot.setSwayControlMode(1)
 
-bot.setYawControlMode(0)
-
-bot.setPitchControlMode(0)
+bot.setYawControlMode(1)
+bot.setRollControlMode(1)
+bot.setPitchControlMode(1)
 
 bot.resetAllThrusters()
 
-bot.setTargetYawAngle(0)
+# bot.setTargetYawAngle(0)
 
-bot.setTargetPitchAngle(0)
+# bot.setTargetPitchAngle(0)
 
 
-angle_sensitivity_yaw = 0.08
+angle_sensitivity_yaw = 30
 
-angle_sensitivity_pitch = 0.08
+angle_sensitivity_pitch = 29
+
+angle_sens_roll = 27
 
 yaw_joystick:int
 roll_joystick:int
 pitch_joystick:int
 
 roll_joystick=0
-
-multiplier_heave = 1
-multiplier_sway = 1
-multiplier_surge = 1
+#DONT INCREASE BEYONG 32
+multiplier_heave = 32
+multiplier_sway = 31
+multiplier_surge = 31
 
 
 buffer_multiplier = 0.09
@@ -57,7 +59,8 @@ hold_yaw = False
 tmp=0
 tmp_yaw=0
 
-
+def limitVals(val):
+    return max(min(0.2,val),-0.2)
 #help(m)
 def mul(x):
     return 100*x
@@ -97,10 +100,17 @@ def call(data):
     sway = data.vals.ax0 
 
     surge = data.vals.ax1
+    surge*=-1 #Surge joy is reversed
+    
 
     yaw_joystick = data.vals.ax2
 
     pitch_joystick = data.vals.ax3
+
+    roll_joystick_left = data.left_bumper
+    roll_joystick_right = data.right_bumper
+    
+    roll_joystick = roll_joystick_left - roll_joystick_right
 
     if(data.pitch_hold==1):
         if(tmp==0):
@@ -128,13 +138,16 @@ def call(data):
     if(reset ==1):
         bot.resetAllThrusters()
 
-    
+    # heave=limitVals(heave)
+    # sway=limitVals(sway)
+    # surge=limitVals(surge)
 
     heave*=multiplier_heave
     sway*=multiplier_sway
     surge*=multiplier_surge
-    surge*=-1 #surge joystick data is reversed
-
+    yaw = yaw_joystick*angle_sensitivity_yaw
+    roll = roll_joystick*angle_sens_roll*-1
+    pitch = pitch_joystick*angle_sensitivity_pitch
 ## Within 7% of the signal, the response is zero, so stick drift can be avoided (not the best way)
     if (heave) >= -(buffer_multiplier*multiplier_heave) and (heave) <=(buffer_multiplier*multiplier_heave):
         heave =0
@@ -158,7 +171,9 @@ def call(data):
     bot.setHeaveThrust(heave)
     bot.setSurgeThrust(surge)
     bot.setSwayThrust(sway)
-
+    bot.setYawThrust(yaw)
+    bot.setRollThrust(roll)
+    bot.setPitchThrust(pitch)
     ## put buffer on input values
 
     if ~hold_yaw: current_angle_yaw += yaw_joystick*angle_sensitivity_yaw
@@ -169,39 +184,51 @@ def call(data):
     if(data.pitch_reset == 1):
         current_angle_pitch=0
 
-    bot.setTargetYawAngle(current_angle_yaw)
+    # bot.setTargetYawAngle(current_angle_yaw)
 
-    bot.setTargetPitchAngle(current_angle_pitch)
+    # bot.setTargetPitchAngle(current_angle_pitch)
 
     bot.updateThrustValues()
     bot.refresh()
     # print("Heave:",heave,"Surge:",surge,"Sway",sway,"Reset-",reset)
-    print("Pitch",current_angle_pitch,"Yaw",current_angle_yaw)
+    print("Roll",roll,"Yaw",yaw,"Heave",heave,"Surge",surge)
 
 
     
     pass
-def rot_yaw(data):
-    bot.updateCurrentYawAngle(data.data)
-    bot.updateThrustValues()
-    bot.refresh()
+# def rot_yaw(data):
+#     bot.updateCurrentYawAngle(data.data)
+#     bot.updateThrustValues()
+#     bot.refresh()
 
-def rot_roll(data):
-    bot.updateCurrentRollAngle(data.data)
-    bot.updateThrustValues()
-    bot.refresh()
+# def rot_roll(data):
+#     bot.updateCurrentRollAngle(data.data)
+#     bot.updateThrustValues()
+#     bot.refresh()
 
 
-def rot_pitch(data):
-    bot.updateCurrentPitchAngle(data.data)
-    bot.updateThrustValues()
-    bot.refresh()
+# def rot_pitch(data):
+#     bot.updateCurrentPitchAngle(data.data)
+#     bot.updateThrustValues()
+#     bot.refresh()
 
 
 
 rospy.init_node("Bot")
 rospy.Subscriber('/joydata', controller,call)
-rospy.Subscriber('/yaw',Float32,rot_yaw)
-rospy.Subscriber('/roll',Float32,rot_roll)
-rospy.Subscriber('/pitch',Float32,rot_pitch)
+# rospy.Subscriber('/yaw',Float32,rot_yaw)
+# rospy.Subscriber('/roll',Float32,rot_roll)
+# rospy.Subscriber('/pitch',Float32,rot_pitch)
+# surge = 0.1
+# surge*=multiplier_surge
+# bot.setSurgeThrust(surge)
+# bot.updateThrustValues()
+# bot.refresh()
+# sleep(3)
+# surge = 0
+# surge*=multiplier_surge
+# bot.setSurgeThrust(surge)
+# bot.updateThrustValues()
+# bot.refresh()
+
 rospy.spin()
