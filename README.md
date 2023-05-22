@@ -1,4 +1,4 @@
-# Control for ROV Cholan - Designed for MATE ROV 22 Pioneer Challenge
+# Control for ROV Cholan - Designed for MATE ROV 23 Pioneer Challenge
 
 ##Src:
  - camera : to get line feed on the materov interface
