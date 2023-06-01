@@ -5,4 +5,5 @@
 #target_link_libraries(output pthread ${catkin_LIBRARIES})
 
 add_subdirectory(thrustered_vehicle_motioncontroller)
+#add_subdirectory(thrustered_vehicle_motioncontroller-master)
 #add_subdirectory(motion_command_executer)
